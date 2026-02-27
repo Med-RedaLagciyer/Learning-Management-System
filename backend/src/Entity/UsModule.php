@@ -28,7 +28,7 @@ class UsModule
     private ?int $position = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $isActive = false;
+    private ?bool $isActive = true;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $className = null;

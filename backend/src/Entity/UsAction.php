@@ -26,7 +26,7 @@ class UsAction
     private ?string $idTag = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $isActive = false;
+    private ?bool $isActive = true;
 
     #[ORM\ManyToOne(targetEntity: UsModule::class, inversedBy: 'actions')]
     #[ORM\JoinColumn(nullable: false)]

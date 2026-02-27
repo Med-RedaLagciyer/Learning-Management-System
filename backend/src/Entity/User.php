@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $isActive = false;
+    private ?bool $isActive = true;
 
     #[ORM\Column(nullable: true)]
     private bool $isApproved = false;
