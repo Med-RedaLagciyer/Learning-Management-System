@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link, Navigate } from 'react-router-dom'
-import api, { decodeToken } from '../services/api'
-import useAuthStore from '../store/authStore'
+import api, { decodeToken } from '../../../services/api'
+import useAuthStore from '../../../store/authStore'
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')
