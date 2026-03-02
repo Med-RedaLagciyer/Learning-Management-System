@@ -1,5 +1,14 @@
 import axios from 'axios'
 
+export function decodeToken(token) {
+    try {
+        const payload = token.split('.')[1]
+        return JSON.parse(atob(payload))
+    } catch {
+        return null
+    }
+}
+
 const api = axios.create({
     baseURL: 'http://localhost/api',
 })

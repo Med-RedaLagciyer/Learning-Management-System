@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import api from '../services/api'
+import { useNavigate, Link, Navigate } from 'react-router-dom'
+import api, { decodeToken } from '../services/api'
 import useAuthStore from '../store/authStore'
 
 export default function LoginPage() {
@@ -12,6 +12,20 @@ export default function LoginPage() {
     const login = useAuthStore((state) => state.login)
     const navigate = useNavigate()
 
+    const token = useAuthStore((state) => state.token)
+    const user = useAuthStore((state) => state.user)
+
+    if (token) {
+        const roles = user?.roles || []
+    if (roles.includes('ROLE_SUPER_ADMIN') || roles.includes('ROLE_ADMIN')) {
+        return <Navigate to="/admin/dashboard" replace />
+    } else if (roles.includes('ROLE_PROFESSOR')) {
+        return <Navigate to="/professor/dashboard" replace />
+    } else {
+        return <Navigate to="/student/dashboard" replace />
+    }
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setError(null)
@@ -19,8 +33,18 @@ export default function LoginPage() {
 
         try {
             const { data } = await api.post('/login', { email, password })
-            login(data.token, data.refresh_token, { email })
-            navigate('/dashboard')
+            const decoded = decodeToken(data.token)
+            const roles = decoded?.roles || []
+
+            login(data.token, data.refresh_token, { email, roles })
+
+            if (roles.includes('ROLE_SUPER_ADMIN') || roles.includes('ROLE_ADMIN')) {
+                navigate('/admin/dashboard')
+            } else if (roles.includes('ROLE_PROFESSOR')) {
+                navigate('/professor/dashboard')
+            } else {
+                navigate('/student/dashboard')
+            }
         } catch (err) {
             setError(err.response?.data?.message || 'Something went wrong')
         } finally {
